@@ -1,10 +1,9 @@
 {
-    "name": "sylius/sylius-standard",
-    "description": "Starting point for projects powered by Sylius eCommerce.",
-    "keywords": ["symfony", "symfony2", "sylius", "distribution", "ecommerce", "cart", "shopping"],
+    "name": "netgen/layouts-sylius-site",
+    "description": "Skeleton project allowing you to bootstrap a new site based on Netgen Layouts and Sylius eCommerce",
+    "keywords": ["symfony", "symfony2", "sylius", "distribution", "ecommerce", "cart", "shopping", "netgen", "layouts"],
     "type": "project",
     "license": "MIT",
-    "homepage": "http://sylius.org",
     "authors": [
         {
             "name": "Paweł Jędrzejewski",
@@ -17,13 +16,20 @@
         {
             "name": "Community contributions",
             "homepage": "http://github.com/Sylius/Sylius/contributors"
+        },
+        {
+            "name": "Netgen",
+            "homepage": "https://www.netgenlabs.com"
         }
     ],
     "require": {
         "php": "^7.1",
 
         "sylius/sylius": "~1.2.3",
-        "symfony/symfony": "^3.4|^4.1"
+        "symfony/symfony": "^3.4|^4.1",
+
+        "netgen/layouts-standard": "~0.12.0",
+        "netgen/layouts-sylius": "~0.12.0"
     },
     "require-dev": {
         "behat/behat": "^3.4",
@@ -42,8 +48,11 @@
         "phpspec/phpspec": "^4.0",
         "phpunit/phpunit": "^6.5",
         "stripe/stripe-php": "^4.1",
-        "sylius-labs/coding-standard": "^2.0"
+        "sylius-labs/coding-standard": "^2.0",
+
+        "franzl/studio": "*"
     },
+    "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
         "post-install-cmd": [
@@ -68,11 +77,8 @@
         "classmap": ["app/AppKernel.php", "app/AppCache.php"]
     },
     "config": {
-        "platform": {
-            "php": "7.1.18"
-        },
-        "bin-dir": "bin",
-        "sort-packages": true
+        "preferred-install": "dist",
+        "bin-dir": "bin"
     },
     "extra": {
         "symfony-app-dir": "app",
@@ -85,7 +91,7 @@
             "file": "app/config/parameters.yml"
         },
         "branch-alias": {
-            "dev-master": "1.2-dev"
+            "dev-master": "0.12.x-dev"
         }
     }
 }

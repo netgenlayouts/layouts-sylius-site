@@ -29,3 +29,9 @@ parameters:
     env(SYLIUS_MAILER_PASSWORD): ~
 
     env(SYLIUS_SECRET): EDITME
+
+    # Netgen Layouts settings
+
+    varnish_server: "%env(VARNISH_SERVER)%"
+
+    env(VARNISH_SERVER): localhost:6081

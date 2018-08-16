@@ -14,7 +14,19 @@ imports:
 parameters:
     locale: en_US
 
+netgen_block_manager:
+    pagelayout: '@NetgenSyliusBlockManager/shop/base_layout.html.twig'
+    design: sylius
+
+fos_http_cache:
+    proxy_client:
+        varnish:
+            http:
+                servers: ["%varnish_server%"]
+
 framework:
+    esi: ~
+    fragments: ~
     translator: { fallbacks: ['%locale%'] }
     secret: '%secret%'
     router:

@@ -29,12 +29,24 @@ class AppKernel extends Kernel
             new \FOS\OAuthServerBundle\FOSOAuthServerBundle(), // Required by SyliusAdminApiBundle.
             new \Sylius\Bundle\AdminApiBundle\SyliusAdminApiBundle(),
 
+            new \FOS\HttpCacheBundle\FOSHttpCacheBundle(),
+            new \Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            new \Netgen\Bundle\ContentBrowserBundle\NetgenContentBrowserBundle(),
+            new \Netgen\Bundle\ContentBrowserUIBundle\NetgenContentBrowserUIBundle(),
+            new \Netgen\Bundle\ContentBrowserSyliusBundle\NetgenContentBrowserSyliusBundle(),
+            new \Netgen\Bundle\BlockManagerBundle\NetgenBlockManagerBundle(),
+            new \Netgen\Bundle\BlockManagerStandardBundle\NetgenBlockManagerStandardBundle(),
+            new \Netgen\Bundle\BlockManagerUIBundle\NetgenBlockManagerUIBundle(),
+            new \Netgen\Bundle\BlockManagerAdminBundle\NetgenBlockManagerAdminBundle(),
+            new \Netgen\Bundle\SyliusBlockManagerBundle\NetgenSyliusBlockManagerBundle(),
+
             new \AppBundle\AppBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test', 'test_cached'], true)) {
             $bundles[] = new \Fidry\AliceDataFixtures\Bridge\Symfony\FidryAliceDataFixturesBundle();
             $bundles[] = new \Nelmio\Alice\Bridge\Symfony\NelmioAliceBundle();
+            $bundles[] = new \Netgen\Bundle\BlockManagerDebugBundle\NetgenBlockManagerDebugBundle();
         }
 
         return array_merge(parent::registerBundles(), $bundles);
