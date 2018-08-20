@@ -38,7 +38,7 @@ class AppKernel extends Kernel
             new \Netgen\Bundle\BlockManagerStandardBundle\NetgenBlockManagerStandardBundle(),
             new \Netgen\Bundle\BlockManagerUIBundle\NetgenBlockManagerUIBundle(),
             new \Netgen\Bundle\BlockManagerAdminBundle\NetgenBlockManagerAdminBundle(),
-            new \Netgen\Bundle\SyliusBlockManagerBundle\NetgenSyliusBlockManagerBundle(),
+            new \Netgen\Bundle\LayoutsSyliusBundle\NetgenLayoutsSyliusBundle(),
 
             new \AppBundle\AppBundle(),
         ];
