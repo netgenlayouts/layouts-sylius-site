@@ -2,91 +2,151 @@ language: php
 
 dist: trusty
 
-sudo: false
-
 php:
-    - 7.1
     - 7.2
 
-cache:
-    yarn: true
-    directories:
-        - ~/.composer/cache/files
-        - $SYLIUS_CACHE_DIR
+jobs:
+    include:
+        -   &test
+            stage: test
+            name: "Symfony 3.4.* build"
 
-env:
-    global:
-        - SYLIUS_CACHE_DIR=$HOME/.sylius-cache
-        - SYLIUS_BUILD_DIR=etc/build
-    matrix:
-        - SYMFONY_VERSION="3.4.*"
-        - SYMFONY_VERSION="4.1.*"
+            sudo: false
 
-services:
-    - memcached
+            env: SYMFONY_VERSION="3.4.*" SYLIUS_CACHE_DIR=$HOME/.sylius-cache SYLIUS_BUILD_DIR=etc/build
 
-before_install:
-    - phpenv config-rm xdebug.ini || true
-    - echo "memory_limit=4096M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+            cache:
+                yarn: true
+                directories:
+                    - ~/.composer/cache/files
+                    - $SYLIUS_CACHE_DIR
 
-    - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+            services:
+                - memcached
+                - mysql
 
-install:
-    - composer require "symfony/symfony:${SYMFONY_VERSION}" --no-interaction --prefer-dist
-    - yarn install
+            before_install:
+                - phpenv config-rm xdebug.ini || true
 
-before_script:
-    - bin/console doctrine:database:create --env=test_cached -vvv # Have to be run with debug = true, to omit generating proxies before setting up the database
-    - bin/console cache:warmup --env=test_cached --no-debug -vvv
-    - bin/console doctrine:migrations:migrate --no-interaction --env=test_cached --no-debug -vvv
+                - echo "memory_limit=4096M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+                - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
-    - bin/console assets:install web --env=test_cached --no-debug -vvv
-    - yarn build
+                - cp .env.test_cached.dist .env.test_cached
+                - set -a && source .env.test_cached && set +a
 
-    # Configure display
-    - /sbin/start-stop-daemon --start --quiet --pidfile /tmp/xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1680x1050x16
-    - export DISPLAY=:99
+            install:
+                - if [ ! -z "${SYMFONY_VERSION}" ]; then bin/require-symfony-version composer.json "${SYMFONY_VERSION}"; fi
+                - composer update --no-interaction --prefer-dist
+                - yarn install
 
-    # Download and configure ChromeDriver
-    - |
-        if [ ! -f $SYLIUS_CACHE_DIR/chromedriver ] || [ "$($SYLIUS_CACHE_DIR/chromedriver --version | grep -c 2.34)" = "0" ]; then
-            curl http://chromedriver.storage.googleapis.com/2.34/chromedriver_linux64.zip > chromedriver.zip
-            unzip chromedriver.zip
-            chmod +x chromedriver
-            mv chromedriver $SYLIUS_CACHE_DIR
-        fi
+            before_script:
+                - bin/console doctrine:database:create --env=test_cached -vvv # Have to be run with debug = true, to omit generating proxies before setting up the database
+                - bin/console cache:warmup --env=test_cached --no-debug -vvv
+                - bin/console doctrine:migrations:migrate --no-interaction --env=test_cached --no-debug -vvv
 
-    # Run ChromeDriver
-    - $SYLIUS_CACHE_DIR/chromedriver > /dev/null 2>&1 &
+                - bin/console assets:install public --env=test_cached --no-debug -vvv
+                - yarn build
 
-    # Download and configure Selenium
-    - |
-        if [ ! -f $SYLIUS_CACHE_DIR/selenium.jar ] || [ "$(java -jar $SYLIUS_CACHE_DIR/selenium.jar --version | grep -c 3.4.0)" = "0" ]; then
-            curl http://selenium-release.storage.googleapis.com/3.4/selenium-server-standalone-3.4.0.jar > selenium.jar
-            mv selenium.jar $SYLIUS_CACHE_DIR
-        fi
+                # Configure display
+                - /sbin/start-stop-daemon --start --quiet --pidfile /tmp/xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1680x1050x16
+                - export DISPLAY=:99
 
-    # Run Selenium
-    - java -Dwebdriver.chrome.driver=$SYLIUS_CACHE_DIR/chromedriver -jar $SYLIUS_CACHE_DIR/selenium.jar > /dev/null 2>&1 &
+                # Download and configure ChromeDriver
+                - |
+                    if [ ! -f $SYLIUS_CACHE_DIR/chromedriver ] || [ "$($SYLIUS_CACHE_DIR/chromedriver --version | grep -c 2.34)" = "0" ]; then
+                        curl http://chromedriver.storage.googleapis.com/2.34/chromedriver_linux64.zip > chromedriver.zip
+                        unzip chromedriver.zip
+                        chmod +x chromedriver
+                        mv chromedriver $SYLIUS_CACHE_DIR
+                    fi
 
-    # Run webserver
-    - bin/console server:run 127.0.0.1:8080 --env=test_cached --docroot=web --router=app/config/router_test_cached.php --no-debug --quiet > /dev/null 2>&1 &
+                # Run ChromeDriver
+                - $SYLIUS_CACHE_DIR/chromedriver > /dev/null 2>&1 &
 
-script:
-    - composer validate --strict
+                # Download and configure Selenium
+                - |
+                    if [ ! -f $SYLIUS_CACHE_DIR/selenium.jar ] || [ "$(java -jar $SYLIUS_CACHE_DIR/selenium.jar --version | grep -c 3.4.0)" = "0" ]; then
+                        curl http://selenium-release.storage.googleapis.com/3.4/selenium-server-standalone-3.4.0.jar > selenium.jar
+                        mv selenium.jar $SYLIUS_CACHE_DIR
+                    fi
 
-    - bin/ecs check src
+                # Run Selenium
+                - java -Dwebdriver.chrome.driver=$SYLIUS_CACHE_DIR/chromedriver -jar $SYLIUS_CACHE_DIR/selenium.jar > /dev/null 2>&1 &
 
-    - bin/phpspec run --no-interaction -f dot
+                # Run webserver
+                - bin/console server:run localhost:8080 -d public --env=test_cached --no-debug --quiet > /dev/null 2>&1 &
 
-    - bin/console sylius:fixtures:load --no-interaction --env=test_cached --no-debug -vvv
+            script:
+                - composer validate --strict
 
-    - echo "Testing (Behat - brand new, regular scenarios; ~@javascript && ~@todo && ~@cli)" "Sylius"
-    - bin/behat --strict --no-interaction -vvv -f progress -p cached --tags="~@javascript && ~@todo && ~@cli"
+                - vendor/bin/ecs check src
 
-    - echo "Testing (Behat - brand new, javascript scenarios; @javascript && ~@todo && ~@cli)" "Sylius"
-    - bin/behat --strict --no-interaction -vvv -f progress -p cached --tags="@javascript && ~@todo && ~@cli" || bin/behat --strict --no-interaction -vvv -f progress -p cached --tags="@javascript && ~@todo && ~@cli" --rerun
+                - vendor/bin/phpspec run --no-interaction -f dot
 
-after_failure:
-    - vendor/lakion/mink-debug-extension/travis/tools/upload-textfiles "${SYLIUS_BUILD_DIR}/*.log"
-    - IMGUR_API_KEY=4907fcd89e761c6b07eeb8292d5a9b2a vendor/lakion/mink-debug-extension/travis/tools/upload-screenshots "${SYLIUS_BUILD_DIR}/*.png"
+                - bin/console sylius:fixtures:load --no-interaction --env=test_cached --no-debug -vvv
+
+                - echo "Testing (Behat, without javascript scenarios; ~@javascript && ~@todo && ~@cli)" "Sylius"
+                - vendor/bin/behat --strict --no-interaction -vvv -f progress -p cached --tags="~@javascript && ~@todo && ~@cli"
+
+                - echo "Testing (Behat, only javascript scenarios; @javascript && ~@todo && ~@cli)" "Sylius"
+                - vendor/bin/behat --strict --no-interaction -vvv -f progress -p cached --tags="@javascript && ~@todo && ~@cli" || vendor/bin/behat --strict --no-interaction -vvv -f progress -p cached --tags="@javascript && ~@todo && ~@cli" --rerun
+
+            after_failure:
+                - vendor/lakion/mink-debug-extension/travis/tools/upload-textfiles "${SYLIUS_BUILD_DIR}/*.log"
+                - IMGUR_API_KEY=4907fcd89e761c6b07eeb8292d5a9b2a vendor/lakion/mink-debug-extension/travis/tools/upload-screenshots "${SYLIUS_BUILD_DIR}/*.png"
+
+        -   <<: *test
+
+            name: "Symfony 4.1.* build"
+
+            env: SYMFONY_VERSION="4.1.*" SYLIUS_CACHE_DIR=$HOME/.sylius-cache SYLIUS_BUILD_DIR=etc/build
+
+        -
+            stage: test
+            name: "Docker build"
+
+            sudo: required
+
+            env: DOCKER_COMPOSE_VERSION=1.22.0
+
+            services:
+                - docker
+
+            addons:
+                apt:
+                    packages:
+                        - docker-ce
+
+            before_install:
+                # Install custom version of docker-composer
+                - sudo rm /usr/local/bin/docker-compose
+                - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+                - chmod +x docker-compose
+                - sudo mv docker-compose /usr/local/bin
+
+                # Shutdown vanilla mysql
+                - sudo service mysql stop
+                - while sudo lsof -Pi :3306 -sTCP:LISTEN -t; do sleep 1; done
+
+            script:
+                - docker-compose --version
+                - docker-compose pull --ignore-pull-failures || true
+                - docker-compose build --pull
+                - docker-compose up -d
+
+                - sleep 60
+
+                - docker-compose exec php bin/console sylius:fixtures:load --no-interaction
+
+                - curl http://localhost/
+
+            before_deploy:
+                - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin "$DOCKER_REGISTRY"
+
+            deploy:
+                provider: script
+                script: docker-compose push
+                skip_cleanup: true
+                on:
+                    repo: Sylius/Sylius-Standard
+                    tags: true

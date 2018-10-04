@@ -1,0 +1,9 @@
+netgen_block_manager:
+    pagelayout: '@NetgenLayoutsSylius/shop/base_layout.html.twig'
+    design: sylius
+
+fos_http_cache:
+    proxy_client:
+        varnish:
+            http:
+                servers: ["%env(VARNISH_SERVER)%"]
