@@ -4,6 +4,7 @@
     "keywords": ["symfony", "symfony2", "sylius", "distribution", "ecommerce", "cart", "shopping", "netgen", "layouts"],
     "type": "project",
     "license": "MIT",
+    "homepage": "https://github.com/netgen-layouts/layouts-sylius-site",
     "authors": [
         {
             "name": "Paweł Jędrzejewski"
@@ -21,7 +22,7 @@
     ],
     "require": {
         "php": "^7.2",
-        "sylius/sylius": "~1.3.1",
+        "sylius/sylius": "~1.3.3",
         "symfony/flex": "^1.1",
 
         "netgen/layouts-standard": "~0.12.0",
