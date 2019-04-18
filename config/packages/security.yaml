@@ -1,5 +1,5 @@
 parameters:
-    sylius.security.admin_regex: "^(/admin|/bm/(dev/)?app|/bm/api|/bm/admin|/cb)"
+    sylius.security.admin_regex: "^(/admin|/nglayouts/(dev/)?app|/nglayouts/api|/nglayouts/admin|/cb)"
     sylius.security.api_regex: "^/api"
     sylius.security.shop_regex: "^/(?!admin|api/.*|api$|media/.*)[^/]++"
 
