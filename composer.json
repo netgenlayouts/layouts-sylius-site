@@ -22,9 +22,9 @@
     ],
     "require": {
         "php": "^7.2",
-        "sylius/sylius": "^1.4",
+        "sylius/sylius": "^1.5",
         "symfony/dotenv": "^4.2",
-        "symfony/flex": "^1.1",
+        "symfony/flex": "^1.2",
 
         "netgen/layouts-standard": "~1.0.0",
         "netgen/layouts-sylius": "~1.0.0"
@@ -78,8 +78,8 @@
             "@auto-scripts"
         ],
         "post-create-project-cmd": [
-            "php bin/console sylius:inform-about-gus",
-            "php bin/console sylius:show-available-plugins --ansi"
+            "@php bin/console sylius:inform-about-gus",
+            "@php bin/console sylius:show-available-plugins --ansi"
         ]
     },
     "config": {
