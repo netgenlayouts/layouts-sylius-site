@@ -22,8 +22,8 @@
     ],
     "require": {
         "php": "^7.2",
-        "sylius/sylius": "^1.5",
-        "symfony/dotenv": "^4.2",
+        "sylius/sylius": "^1.6",
+        "symfony/dotenv": "^4.3",
         "symfony/flex": "^1.2",
 
         "netgen/layouts-standard": "~1.0.0",
@@ -42,15 +42,18 @@
         "lakion/mink-debug-extension": "^1.2.3",
         "lchrusciel/api-test-case": "^3.0",
         "phpspec/phpspec": "^5.0",
+        "phpstan/extension-installer": "^1.0",
+        "phpstan/phpstan-doctrine": "^0.11.3",
+        "phpstan/phpstan-shim": "^0.11.7",
+        "phpstan/phpstan-webmozart-assert": "^0.11.2",
         "phpunit/phpunit": "^6.5",
         "sensiolabs/security-checker": "^5.0",
         "stripe/stripe-php": "^6.28",
         "sylius-labs/coding-standard": "^2.0",
-        "symfony/browser-kit": "^3.4|^4.1",
-        "symfony/debug-bundle": "^3.4|^4.1",
-        "symfony/intl": "^3.4|^4.1",
-        "symfony/web-profiler-bundle": "^3.4|^4.1",
-        "symfony/web-server-bundle": "^3.4|^4.1",
+        "symfony/browser-kit": "^3.4|^4.3",
+        "symfony/debug-bundle": "^3.4|^4.3",
+        "symfony/intl": "^3.4|^4.3",
+        "symfony/web-profiler-bundle": "^3.4|^4.3",
 
         "franzl/studio": "*"
     },
@@ -78,7 +81,7 @@
             "@auto-scripts"
         ],
         "post-create-project-cmd": [
-            "@php bin/console sylius:inform-about-gus",
+            "@php bin/console sylius:inform-about-gus --ansi",
             "@php bin/console sylius:show-available-plugins --ansi"
         ]
     },

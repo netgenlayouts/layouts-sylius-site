@@ -2,6 +2,7 @@
 /public/css
 /public/js
 /public/media
+!/public/media/image/.gitkeep
 
 /node_modules
 
@@ -23,10 +24,6 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
-
-###> symfony/web-server-bundle ###
-/.web-server-pid
-###< symfony/web-server-bundle ###
 
 ###> friendsofphp/php-cs-fixer ###
 /.php_cs
