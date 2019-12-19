@@ -59,6 +59,9 @@
 
         "franzl/studio": "*"
     },
+    "conflict": {
+        "symfony/validator": "^4.4"
+    },
     "autoload": {
         "psr-4": {
             "App\\": "src/"
