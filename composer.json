@@ -55,9 +55,7 @@
         "symfony/browser-kit": "^3.4|^4.3",
         "symfony/debug-bundle": "^3.4|^4.3",
         "symfony/intl": "^3.4|^4.3",
-        "symfony/web-profiler-bundle": "^3.4|^4.3",
-
-        "franzl/studio": "*"
+        "symfony/web-profiler-bundle": "^3.4|^4.3"
     },
     "conflict": {
         "symfony/validator": "^4.4"
