@@ -29,8 +29,6 @@
         "netgen/layouts-standard": "~1.1.0",
         "netgen/layouts-sylius": "~1.1.0"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "require-dev": {
         "behat/behat": "^3.4",
         "behat/mink": "^1.7@dev",
