@@ -27,7 +27,8 @@
         "symfony/flex": "^1.2",
 
         "netgen/layouts-standard": "~1.1.0",
-        "netgen/layouts-sylius": "~1.1.0"
+        "netgen/layouts-sylius": "~1.1.0",
+        "php-http/socket-client": "^2.0@beta"
     },
     "require-dev": {
         "behat/behat": "^3.6.1",
