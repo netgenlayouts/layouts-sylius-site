@@ -26,8 +26,8 @@
         "symfony/dotenv": "^4.4",
         "symfony/flex": "^1.2",
 
-        "netgen/layouts-standard": "~1.1.0",
-        "netgen/layouts-sylius": "~1.1.0"
+        "netgen/layouts-standard": "~1.2.0",
+        "netgen/layouts-sylius": "~1.2.0"
     },
     "require-dev": {
         "behat/behat": "^3.6.1",
