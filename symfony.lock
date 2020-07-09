@@ -297,25 +297,43 @@
         }
     },
     "netgen/content-browser": {
-        "version": "1.0.x-dev"
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "ccd4428ef5235b67100689c7b24929a789b408ac"
+        },
+        "files": [
+            "config/routes/netgen_content_browser.yaml"
+        ]
     },
     "netgen/content-browser-sylius": {
-        "version": "1.0.x-dev"
+        "version": "1.2.0"
     },
     "netgen/content-browser-ui": {
-        "version": "1.0.x-dev"
+        "version": "1.2.0"
     },
     "netgen/layouts-core": {
-        "version": "1.0.x-dev"
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "c39a03807bc85a3d1aca4c98510902e47aeab2b7"
+        },
+        "files": [
+            "config/routes/netgen_layouts.yaml"
+        ]
     },
     "netgen/layouts-standard": {
-        "version": "1.0.x-dev"
+        "version": "1.2.0"
     },
     "netgen/layouts-sylius": {
-        "version": "1.0.x-dev"
+        "version": "1.2.0"
     },
     "netgen/layouts-ui": {
-        "version": "1.0.x-dev"
+        "version": "1.2.0"
     },
     "nette/finder": {
         "version": "v2.4.2"
