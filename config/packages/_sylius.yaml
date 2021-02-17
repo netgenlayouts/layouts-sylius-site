@@ -3,8 +3,10 @@ imports:
 
     - { resource: "@SyliusAdminBundle/Resources/config/app/config.yml" }
     - { resource: "@SyliusAdminApiBundle/Resources/config/app/config.yml" }
+    - { resource: "@SyliusApiBundle/Resources/config/app/config.yaml" }
 
     - { resource: "@SyliusShopBundle/Resources/config/app/config.yml" }
+    - { resource: "@SyliusPayPalPlugin/Resources/config/config.yaml" }
 
 parameters:
     sylius_core.public_dir: '%kernel.project_dir%/public'

@@ -11,14 +11,14 @@ default:
     extensions:
         DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension: ~
 
-        Lakion\Behat\MinkDebugExtension:
+        FriendsOfBehat\MinkDebugExtension:
             directory: etc/build
             clean_start: false
             screenshot: true
 
         Behat\MinkExtension:
             files_path: "%paths.base%/vendor/sylius/sylius/src/Sylius/Behat/Resources/fixtures/"
-            base_url: "http://localhost:8080/"
+            base_url: "https://localhost:8080/"
             default_session: symfony
             javascript_session: chrome_headless
             sessions:
